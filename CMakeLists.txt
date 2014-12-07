@@ -8,12 +8,17 @@ cmake_minimum_required( VERSION 2.8 )
 
 # Include necessary submodules
 if(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/../CMake")
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/../CMake")
+	set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/../CMake")
 else()
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMake")
+	set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMake")
 endif()
 include(SetOutputDirectories )
 include(SourceFileScanner)
+
+# Use Flex & Bison
+SET( PRECOMPILE_FLEX_AND_BISON ON)
+SET( FLEX_EXECUTABLE "${CMAKE_SOURCE_DIR}/3rdParty/FlexBison/bin/flex.exe")
+SET( BISON_EXECUTABLE "${CMAKE_SOURCE_DIR}/3rdParty/FlexBison/bin/bison.exe")
 
 #create solution
 parse_directory_name(SOLUTION_NAME)
@@ -23,9 +28,6 @@ project( ${SOLUTION_NAME} )
 add_definitions( "-D_CRT_SECURE_NO_WARNINGS" "/FC")
 # Enable Unicode
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /UMBCS /D_UNICODE /DUNICODE")
-
-# directx sdk 
-find_package(DirectX REQUIRED)
 
 #At last, cache include dirs and scan source files
 setup_solution(SOLUTION_NAME)

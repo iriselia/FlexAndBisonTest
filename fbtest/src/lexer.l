@@ -1,20 +1,25 @@
 %{
-#include <cstdio>
-#include <iostream>
-using namespace std;
-#define YY_DECL extern "C" int yylex()
-
-#include "snazzle.tab.h"  // to get the token types that we return
-
+#define YY_NO_UNISTD_H
+#include "parser.bison.h"
 %}
+
 %%
-[ \t\n]           ;
-[0-9]+\.[0-9]+ { yylval.fval = atof(yytext); return FLOAT; }
-[0-9]+            { yylval.ival = atoi(yytext); return INT; }
-[a-zA-Z0-9]+      {
-	// we have to copy because we can't rely on yytext not changing underneath us:
-	yylval.sval = strdup(yytext);
-	return STRING;
+[0-9]*[02468]"\n" { return EVEN; }
+[0-9]*[13579]"\n" { return ODD; }
+%%
+int main(void)
+{
+yyparse();
+return 0;
 }
-.                ;
-%%
+
+int yywrap(void)
+{
+return 0;
+}
+
+int yyerror(void)
+{
+printf("Error\n");
+exit(1);
+} 
